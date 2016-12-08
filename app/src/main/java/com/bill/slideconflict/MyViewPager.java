@@ -151,12 +151,12 @@ public class MyViewPager extends ViewGroup {
                 break;
             case MotionEvent.ACTION_UP:
                 if (!isFling) { // 没有快速滑动的情况下，我们按照距离来判断
-                    int nextId = 0; // 记录下一个View的id
+                    int nextId; // 记录下一个View的id
                     if (event.getX() - fristDownX > getWidth() / 2) {
-                        // 手指离开点的X轴坐标-firstDownX > 屏幕宽度的一半，左移
+                        // 手指离开点的X轴坐标-firstDownX > 屏幕宽度的一半，屏幕左移，右滑
                         nextId = (currentId - 1) <= 0 ? 0 : currentId - 1;
                     } else if (fristDownX - event.getX() > getWidth() / 2) {
-                        // 手指离开点的X轴坐标 - firstDownX < 屏幕宽度的一半，右移
+                        // firstDownX - 手指离开点的X轴坐标 > 屏幕宽度的一半，屏幕右移，左滑
                         nextId = currentId + 1;
                     } else {
                         nextId = currentId;
