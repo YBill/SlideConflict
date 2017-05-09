@@ -28,6 +28,10 @@ public final class LiveSlideView extends ViewGroup {
      */
     private int currentId = 1;
     /**
+     * 记录上一个View的id
+     */
+    private int previousId = 1;
+    /**
      * 第一次手指按下的X坐标
      */
     private int firstX = 0;
@@ -75,7 +79,7 @@ public final class LiveSlideView extends ViewGroup {
 
     private void init(Context context) {
         View transparentView = new View(context);
-        transparentView.setBackgroundColor(Color.TRANSPARENT);
+        transparentView.setBackgroundColor(Color.RED);
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         this.addView(transparentView, 0, params);
 
@@ -88,7 +92,6 @@ public final class LiveSlideView extends ViewGroup {
 
             @Override
             public void onShowPress(MotionEvent motionEvent) {
-
             }
 
             @Override
@@ -99,16 +102,25 @@ public final class LiveSlideView extends ViewGroup {
             @Override
             public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float distanceX, float distanceY) {
                 // 手指滑动
-                if ((Math.abs(distanceY) - Math.abs(distanceX) > 0) || (distanceX > 0 && currentId == 1) || (distanceX < 0 && currentId == 0)) {
+                if (Math.abs(distanceY) - Math.abs(distanceX) > 0) {
                     return false;
                 }
+
+                if (currentId == 1 && distanceX > 0 && (motionEvent.getX() > motionEvent1.getX())) {
+                    return false;
+                }
+
+
+                if (currentId == 0 && distanceX < 0 && (motionEvent.getX() < motionEvent1.getX())) {
+                    return false;
+                }
+
                 scrollBy((int) distanceX, 0);
                 return false;
             }
 
             @Override
             public void onLongPress(MotionEvent motionEvent) {
-
             }
 
             @Override
@@ -196,6 +208,16 @@ public final class LiveSlideView extends ViewGroup {
         currentId = (nextId >= 0) ? nextId : 0;
         currentId = (nextId <= getChildCount() - 1) ? nextId : (getChildCount() - 1);
 
+        if (previousId != currentId) {
+            if (pageChangedListener != null) {
+                if (currentId == 1)
+                    pageChangedListener.viewStatus(true);
+                else
+                    pageChangedListener.viewStatus(false);
+            }
+        }
+        previousId = currentId;
+
         int distanceX = (currentId - 1) * getWidth() - getScrollX();
         scroller.startScroll(getScrollX(), 0, distanceX, 0);
         invalidate();
@@ -210,7 +232,23 @@ public final class LiveSlideView extends ViewGroup {
         }
     }
 
+    public interface PageChangedListener {
+        void viewStatus(boolean show);
+    }
+
+    private PageChangedListener pageChangedListener;
+
+
     /////////////////////////////////下面为对外API///////////////////////////////////
+
+    /**
+     * 滑动回调
+     *
+     * @param pageChangedListener
+     */
+    public void setOnPageChangedListener(PageChangedListener pageChangedListener) {
+        this.pageChangedListener = pageChangedListener;
+    }
 
 
     /**

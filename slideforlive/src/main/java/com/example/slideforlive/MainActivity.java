@@ -30,6 +30,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         statusBtn.setOnClickListener(this);
         showBtn.setOnClickListener(this);
         hideBtn.setOnClickListener(this);
+        liveSlideView.setOnPageChangedListener(new LiveSlideView.PageChangedListener() {
+            @Override
+            public void viewStatus(boolean show) {
+                Toast.makeText(MainActivity.this, "" + show, Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
