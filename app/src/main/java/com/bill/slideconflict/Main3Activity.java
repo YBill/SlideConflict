@@ -64,7 +64,7 @@ public class Main3Activity extends AppCompatActivity {
                 myViewPager.moveToDest(checkedId);
             }
         });
-
+        myViewPager.moveToDest(3);
     }
 
     private void createList(ViewGroup layout) {
