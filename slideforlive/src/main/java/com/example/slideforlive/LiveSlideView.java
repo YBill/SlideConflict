@@ -14,7 +14,7 @@ import android.widget.Scroller;
  * Created by Bill on 2017/5/9.
  */
 
-public class LiveSlideView extends ViewGroup {
+public final class LiveSlideView extends ViewGroup {
 
     private GestureDetector detector;
     private Scroller scroller;
@@ -192,7 +192,7 @@ public class LiveSlideView extends ViewGroup {
      *
      * @param nextId
      */
-    public void moveToDest(int nextId) {
+    private void moveToDest(int nextId) {
         currentId = (nextId >= 0) ? nextId : 0;
         currentId = (nextId <= getChildCount() - 1) ? nextId : (getChildCount() - 1);
 
@@ -207,6 +207,33 @@ public class LiveSlideView extends ViewGroup {
             int newX = scroller.getCurrX();
             scrollTo(newX, 0);
             invalidate();
+        }
+    }
+
+    /////////////////////////////////下面为对外API///////////////////////////////////
+
+
+    /**
+     * view是否显示 true：显示
+     *
+     * @return
+     */
+    public boolean isViewShow() {
+        if (currentId == 1)
+            return true;
+        return false;
+    }
+
+    /**
+     * 设置滑动状态
+     *
+     * @param show true: 显示
+     */
+    public void setViewShow(boolean show) {
+        if (show && currentId == 0) {
+            moveToDest(1);
+        } else if (!show && currentId == 1) {
+            moveToDest(0);
         }
     }
 

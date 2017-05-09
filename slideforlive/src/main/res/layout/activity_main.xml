@@ -12,10 +12,38 @@
         android:scaleType="fitXY"
         android:src="@drawable/image" />
 
+    <LinearLayout
+        android:id="@+id/top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btn_status"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="当前状态" />
+
+        <Button
+            android:id="@+id/btn_show"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="显示" />
+
+        <Button
+            android:id="@+id/btn_hide"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="隐藏" />
+    </LinearLayout>
+
     <com.example.slideforlive.LiveSlideView
         android:id="@+id/view_group"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@id/top">
 
         <RelativeLayout
             android:layout_width="match_parent"
